@@ -70,8 +70,13 @@ const Index = () => {
     const bill = saveBillToHistory();
     if (bill) {
       setViewingBill(bill);
-      setTimeout(() => window.print(), 100);
-      resetForm();
+      setTimeout(() => {
+        window.print();
+        // Reset after print dialog closes (give user time to print)
+        setTimeout(() => {
+          resetForm();
+        }, 500);
+      }, 100);
     }
   };
 
