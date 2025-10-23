@@ -1,4 +1,5 @@
 import { Tractor } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   billCount: number;
@@ -16,9 +17,12 @@ export const Header = ({ billCount }: HeaderProps) => {
               <p className="text-sm opacity-90">Abeysinghe - +94740149500</p>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-sm opacity-90">✓ Offline Mode</p>
-            <p className="text-xs opacity-75">{billCount} Bills Saved</p>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-sm opacity-90">✓ Offline Mode</p>
+              <p className="text-xs opacity-75">{billCount} Bills Saved</p>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </div>

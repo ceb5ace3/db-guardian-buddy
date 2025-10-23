@@ -6,6 +6,7 @@ import { BillHistory } from '@/components/BillHistory';
 import { SettingsPanel } from '@/components/SettingsPanel';
 import { BackupPanel } from '@/components/BackupPanel';
 import { PrintPreview } from '@/components/PrintPreview';
+import { BillPreview } from '@/components/BillPreview';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { Bill, Settings } from '@/types';
 import { toast } from 'sonner';
@@ -139,13 +140,30 @@ const Index = () => {
         )}
 
         {activeTab === 'billing' && !viewingBill && (
-          <BillingForm
-            billData={billData}
-            setBillData={setBillData}
-            settings={settings}
-            onSaveAndPrint={handleSaveAndPrint}
-            onReset={resetForm}
-          />
+          <div className="grid lg:grid-cols-2 gap-6">
+            <BillingForm
+              billData={billData}
+              setBillData={setBillData}
+              settings={settings}
+              onSaveAndPrint={handleSaveAndPrint}
+              onReset={resetForm}
+            />
+            <div className="lg:sticky lg:top-6 h-fit">
+              <h2 className="text-xl font-bold mb-4 print:hidden">Live Preview</h2>
+              <BillPreview
+                customerName={billData.customerName}
+                phoneNumber={billData.phoneNumber}
+                workType={billData.workType}
+                acreage={billData.acreage}
+                hours={billData.hours}
+                amountPaid={billData.amountPaid}
+                customDate={billData.customDate}
+                settings={settings}
+                total={calculateTotal()}
+                amountDue={calculateDue()}
+              />
+            </div>
+          </div>
         )}
 
         {activeTab === 'billing' && viewingBill && (
