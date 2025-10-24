@@ -75,8 +75,8 @@ const Index = () => {
         // Reset after print dialog closes (give user time to print)
         setTimeout(() => {
           resetForm();
-        }, 500);
-      }, 100);
+        }, 1000);
+      }, 300);
     }
   };
 
