@@ -1,46 +1,4 @@
 import { Bill, Settings } from '@/types';
-import { Browser } from '@capacitor/browser';
-import { Capacitor } from '@capacitor/core';
-
-async function printReceipt() {
-  const platform = Capacitor.getPlatform();
-
-  if (platform === 'web') {
-    window.print();
-    return;
-  }
-
-  const printContent = document.getElementById('printArea');
-  if (!printContent) return;
-
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-          body { font-family: monospace; padding: 20px; max-width: 80mm; margin: 0 auto; }
-          /* Add all your print styles here */
-        </style>
-      </head>
-      <body>
-        ${printContent.innerHTML}
-        <script>window.onload = () => setTimeout(() => window.print(), 500);</script>
-      </body>
-    </html>
-  `;
-
-  // Create data URL
-  const blob = new Blob([htmlContent], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-
-  // Open in system browser (which has print functionality)
-  await Browser.open({ url });
-}
-
-// Export this function
-export { printReceipt };
 
 interface PrintPreviewProps {
   bill: Bill | null;
@@ -78,6 +36,12 @@ export const PrintPreview = ({ bill, settings }: PrintPreviewProps) => {
             padding: 10px;
             font-family: monospace;
             font-size: 12px;
+            background: white !important;
+            color: black !important;
+          }
+          #printArea * {
+            color: black !important;
+            background: transparent !important;
           }
         }
       `}</style>
