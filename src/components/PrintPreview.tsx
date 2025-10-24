@@ -1,4 +1,46 @@
 import { Bill, Settings } from '@/types';
+import { Browser } from '@capacitor/browser';
+import { Capacitor } from '@capacitor/core';
+
+async function printReceipt() {
+  const platform = Capacitor.getPlatform();
+
+  if (platform === 'web') {
+    window.print();
+    return;
+  }
+
+  const printContent = document.getElementById('printArea');
+  if (!printContent) return;
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body { font-family: monospace; padding: 20px; max-width: 80mm; margin: 0 auto; }
+          /* Add all your print styles here */
+        </style>
+      </head>
+      <body>
+        ${printContent.innerHTML}
+        <script>window.onload = () => setTimeout(() => window.print(), 500);</script>
+      </body>
+    </html>
+  `;
+
+  // Create data URL
+  const blob = new Blob([htmlContent], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+
+  // Open in system browser (which has print functionality)
+  await Browser.open({ url });
+}
+
+// Export this function
+export { printReceipt };
 
 interface PrintPreviewProps {
   bill: Bill | null;
@@ -45,14 +87,14 @@ export const PrintPreview = ({ bill, settings }: PrintPreviewProps) => {
           <div style={{ fontWeight: 'bold', fontSize: '16px' }}>ABEYSINGHE</div>
           <div style={{ fontSize: '10px' }}>Tractor Services (4WD) &</div>
           <div style={{ fontSize: '10px' }}>Blade</div>
-          <div style={{ fontSize: '10px', marginTop: '3px' }}>බයේසිංහ ට්‍රැක්ටර් සේවා (4WD)</div>
+          <div style={{ fontSize: '10px', marginTop: '3px' }}>සියලුම ට්‍රැක්ටර් වැඩ කටයුතු (4WD)</div>
           <div style={{ fontSize: '10px', marginTop: '3px' }}>+94 74 014 9500</div>
         </div>
 
         {/* Customer */}
         <div style={{ marginBottom: '8px' }}>
-          <div><strong>Customer:</strong> {bill.customerName}</div>
-          {bill.phoneNumber && <div style={{ fontSize: '10px', marginTop: '2px' }}>{bill.phoneNumber}</div>}
+          <div><strong>නම:</strong> {bill.customerName}</div>
+          <div><strong>දු.අං.:</strong> {bill.phoneNumber}</div>
         </div>
 
         {/* Work Details */}
@@ -60,15 +102,15 @@ export const PrintPreview = ({ bill, settings }: PrintPreviewProps) => {
           <div><strong>Work Type:</strong> {bill.workType === 'tractor' ? 'Tractor (4WD)' : 'Blade'}</div>
           {bill.workType === 'tractor' ? (
             <>
-              <div style={{ marginTop: '3px' }}>අක්කරය: {bill.acreage} acres</div>
-              <div>අක්කරයකට Rs.</div>
-              <div>මිල: {settings.ratePerAcre.toFixed(2)}</div>
+              <div style={{ marginTop: '3px' }}>අක්කර: {bill.acreage} යි</div>
+              <div>අක්කරයකට මිල:</div>
+              <div>රු. {settings.ratePerAcre.toFixed(2)}</div>
             </>
           ) : (
             <>
               <div style={{ marginTop: '3px' }}>පැය: {bill.hours} hours</div>
-              <div>පැයකට Rs.</div>
-              <div>මිල: {settings.ratePerHour.toFixed(2)}</div>
+              <div>පැයකට මිල:</div>
+              <div>රු. {settings.ratePerHour.toFixed(2)}</div>
             </>
           )}
         </div>
@@ -84,12 +126,12 @@ export const PrintPreview = ({ bill, settings }: PrintPreviewProps) => {
         {/* Payment */}
         {parseFloat(bill.amountPaid) > 0 && (
           <div style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px dashed #000' }}>
-            <div>ගෙවූ මිල: Rs. {parseFloat(bill.amountPaid).toFixed(2)}</div>
+            <div>ගෙවූ මිල: රු. {parseFloat(bill.amountPaid).toFixed(2)}</div>
             <div style={{ marginTop: '5px' }}>
-              <strong>ගෙවීමට ඇති රු.</strong>
+              <strong>ගෙවීමට ඇති මුදල</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>මිල:</strong>
+              <strong>රු.</strong>
               <strong style={{ fontSize: '16px' }}>{bill.amountDue.toFixed(2)}</strong>
             </div>
           </div>

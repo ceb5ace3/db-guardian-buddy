@@ -45,15 +45,22 @@ export const BillPreview = ({
             <h2 className="text-xl font-bold">ABEYSINGHE</h2>
             <p className="text-xs mt-1">Tractor Services (4WD) &</p>
             <p className="text-xs">Blade</p>
-            <p className="text-xs mt-1">බයේසිංහ ට්‍රැක්ටර් සේවා (4WD)</p>
+            <p className="text-xs mt-1">සියලුම ට්‍රැක්ටර් වැඩ කටයුතු (4WD)</p>
             <p className="text-xs mt-1">+94 74 014 9500</p>
           </div>
 
           {/* Customer */}
           <div className="mb-3">
             <div className="flex justify-between">
-              <span className="font-semibold">Customer:</span>
+              <span className="font-semibold">නම:</span>
               <span>{customerName || '___________'}</span>
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <div className="flex justify-between">
+              <span className="font-semibold">Number:</span>
+              <span>{phoneNumber || '___________'}</span>
             </div>
           </div>
 
@@ -65,19 +72,17 @@ export const BillPreview = ({
                 <span>{workType === 'tractor' ? 'Tractor (4WD)' : 'Blade'}</span>
               </div>
             </div>
-            
+
             {workType === 'tractor' ? (
               <>
                 <div className="flex justify-between">
-                  <span>අක්කරය:</span>
-                  <span>{acreage || '0'} acres</span>
+                  <span>අක්කර:</span>
+                  <span>{acreage || '0'} </span>
                 </div>
                 <div className="flex justify-between">
                   <span>අක්කරයකට</span>
-                  <span>Rs.</span>
-                </div>
-                <div className="flex justify-between">
                   <span>මිල:</span>
+                  <span>රු.</span>
                   <span>{settings.ratePerAcre.toFixed(2)}</span>
                 </div>
               </>
@@ -89,10 +94,8 @@ export const BillPreview = ({
                 </div>
                 <div className="flex justify-between">
                   <span>පැයකට</span>
-                  <span>Rs.</span>
-                </div>
-                <div className="flex justify-between">
                   <span>මිල:</span>
+                  <span>රු.</span>
                   <span>{settings.ratePerHour.toFixed(2)}</span>
                 </div>
               </>
@@ -115,10 +118,10 @@ export const BillPreview = ({
                 <span>Rs. {parseFloat(amountPaid).toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center mt-2">
-                <span className="font-bold">ගෙවීමට ඇති රු.</span>
+                <span className="font-bold">ගෙවීමට ඇති</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="font-bold">මිල:</span>
+                <span className="font-bold">මුදල:</span>
                 <span className="text-lg font-bold">{amountDue.toFixed(2)}</span>
               </div>
             </div>
